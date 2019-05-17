@@ -1,4 +1,5 @@
 from tkinter import ttk
+import serial.tools.list_ports
 import csv
 import time
 import os
@@ -124,17 +125,22 @@ class Proyecto():
             self.Canvas.grid(row=0,column=0)
             self.Canvas.configure(yscrollcommand=scroll.set)
 
-            Puerto=[StringVar(),StringVar(),StringVar(),StringVar()]
-            Menu1=OptionMenu(self.Ventana2,Puerto[0],self.Puertos)
+            puertos1=serial.tools.list_ports.comports()
+            aux=0
+            com=StringVar(self.Ventana2)
+            for puerto in puertos1:
+                self.Puertos.append(str(puerto))
+                aux+=1
+            Menu1=OptionMenu(self.Ventana2,com,*self.Puertos)
             Menu1.config(width=10, height=2)
             Menu1.grid(row=5,column=0,sticky="ewsn")
-            Menu2=OptionMenu(self.Ventana2,Puerto[1],self.Puertos)
+            Menu2=OptionMenu(self.Ventana2,com,*self.Puertos)
             Menu2.config(width=10, height=2)
             Menu2.grid(row=5,column=1,sticky="wsne")
-            Menu3=OptionMenu(self.Ventana2,Puerto[2],self.Puertos)
+            Menu3=OptionMenu(self.Ventana2,com,*self.Puertos)
             Menu3.config(width=10, height=2)
             Menu3.grid(row=5,column=2,sticky="esnw")
-            Menu4=OptionMenu(self.Ventana2,Puerto[3],self.Puertos)
+            Menu4=OptionMenu(self.Ventana2,com,*self.Puertos)
             Menu4.config(width=10, height=2)
             Menu4.grid(row=5,column=3,sticky="senw")
 
@@ -258,7 +264,6 @@ class Proyecto():
     @classmethod
     def prueba2(self):
         while True:
-            time.sleep(2)
             Valor=Proyecto.Verificar()
             if Valor != 0:
                 Proyecto.Actualizar(Valor)
@@ -267,6 +272,27 @@ class Proyecto():
     def Abrir_Tablas(self,a):  
         Archivo= filedialog.askopenfilename(title="Abrir",initialdir="C:\\Users\Desktop")
         self.Ruta[a].set(Archivo) 
+
+    @classmethod
+    def Arduino(self):
+        cosa=b"Holi"
+        ###establece Conexion con arduino
+        for Coms in self.Puertos:
+            PuertoSerie = serial.Serial(Coms, 9600, timeout=1.0)
+            time.sleep(1.8)
+        ####Envia y recibe String a/de arduino
+        cadena = cosa
+        print("Python " ,cadena.decode('ASCII'))
+        PuertoSerie.write(cadena)
+        if(PuertoSerie.readline().decode('ASCII')==cadena):
+            return True
+        else:
+            return False
+
+        #####Cierra conexion
+        PuertoSerie.close()
+
+
 
 Cosa=Proyecto()
 Cosa.Panel_Principal()

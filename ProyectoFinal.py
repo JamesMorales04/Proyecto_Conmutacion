@@ -20,7 +20,7 @@ class Proyecto():
     Filas_totales=0
     Pestañas=ttk.Notebook()
     Pestaña1=Frame(Pestañas,bg="#C0DFFE")
-    Puertos=[]
+    Puertos=[""]
     Estado=[StringVar(),StringVar(),StringVar(),StringVar()]
     Pedido=[StringVar(),StringVar(),StringVar(),StringVar()]
     ModificacionOld=[[0,0],[0,0],[0,0],[0,0]]
@@ -124,23 +124,23 @@ class Proyecto():
             self.Ventana.grid(row=2,column=1,sticky="s")
             self.Canvas.grid(row=0,column=0)
             self.Canvas.configure(yscrollcommand=scroll.set)
-
+            inicial=StringVar()
+            inicial.set("Elige")
             puertos1=serial.tools.list_ports.comports()
             aux=0
-            com=StringVar(self.Ventana2)
             for puerto in puertos1:
                 self.Puertos.append(str(puerto))
                 aux+=1
-            Menu1=OptionMenu(self.Ventana2,com,*self.Puertos)
+            Menu1=OptionMenu(self.Ventana2,inicial,*self.Puertos)
             Menu1.config(width=10, height=2)
             Menu1.grid(row=5,column=0,sticky="ewsn")
-            Menu2=OptionMenu(self.Ventana2,com,*self.Puertos)
+            Menu2=OptionMenu(self.Ventana2,inicial,*self.Puertos)
             Menu2.config(width=10, height=2)
             Menu2.grid(row=5,column=1,sticky="wsne")
-            Menu3=OptionMenu(self.Ventana2,com,*self.Puertos)
+            Menu3=OptionMenu(self.Ventana2,inicial,*self.Puertos)
             Menu3.config(width=10, height=2)
             Menu3.grid(row=5,column=2,sticky="esnw")
-            Menu4=OptionMenu(self.Ventana2,com,*self.Puertos)
+            Menu4=OptionMenu(self.Ventana2,inicial,*self.Puertos)
             Menu4.config(width=10, height=2)
             Menu4.grid(row=5,column=3,sticky="senw")
 

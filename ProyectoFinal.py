@@ -20,7 +20,7 @@ class Proyecto():
     Filas_totales=0
     Pestañas=ttk.Notebook()
     Pestaña1=Frame(Pestañas,bg="#C0DFFE")
-    Puertos=[""]
+    Puertos=["Cosa","Cosa1","Cosa2","Cosa3"]
     Estado=[StringVar(),StringVar(),StringVar(),StringVar()]
     Pedido=[StringVar(),StringVar(),StringVar(),StringVar()]
     ModificacionOld=[[0,0],[0,0],[0,0],[0,0]]
@@ -30,7 +30,7 @@ class Proyecto():
 
     def Panel_Principal(self):
         self.Base.title("Almacenamiento")
-        self.Base.minsize(1366,1080)
+        self.Base.minsize(1366,768)
         Proyecto.Crear_Pestañas()
         self.Base.mainloop()
 
@@ -48,13 +48,32 @@ class Proyecto():
     
         Separadores=Label(Frame,width=60, height=2,bg="#C0DFFE").grid(row=0,column=0,sticky="wsn")
         Separadores2=Label(Frame,width=60, height=2,bg="#C0DFFE").grid(row=1,column=0,sticky="wsn")
-
-        Boton1=(Button(Frame, text="Abrir",command=lambda:Proyecto.Abrir_Tablas(0),width=4, height=1,bg="snow4",borderwidth=5)).grid(row=2,column=2,sticky="nsew")
-        Boton2=(Button(Frame, text="Abrir",command=lambda:Proyecto.Abrir_Tablas(1),width=4, height=1,bg="snow4",borderwidth=5)).grid(row=5,column=2,sticky="nsew")
-        Boton3=(Button(Frame, text="Abrir",command=lambda:Proyecto.Abrir_Tablas(2),width=4, height=1,bg="snow4",borderwidth=5)).grid(row=8,column=2,sticky="nsew")
-        Boton4=(Button(Frame, text="Abrir",command=lambda:Proyecto.Abrir_Tablas(3),width=4, height=1,bg="snow4",borderwidth=5)).grid(row=11,column=2,sticky="nsew")
-        Boton5=(Button(Frame, text="Abrir",command=lambda:Proyecto.Abrir_Tablas(4),width=4, height=1,bg="snow4",borderwidth=5)).grid(row=14,column=2,sticky="nsew")
-        Boton6=(Button(Frame, text="Abrir",command=lambda:Proyecto.Abrir_Tablas(5),width=4, height=1,bg="snow4",borderwidth=5)).grid(row=17,column=2,sticky="nsew")
+        foto=PhotoImage(file="580b57fcd9996e24bc43c4c5.png")
+        foto = foto.subsample(15)
+        Boton1 = Button(Frame, text ="",command=lambda:Proyecto.Abrir_Tablas(0),bg="#C0DFFE")
+        Boton1.image = foto   
+        Boton1.config(image=foto)
+        Boton1.grid(row=2,column=2,sticky="nsew")
+        Boton2 = Button(Frame, text ="",command=lambda:Proyecto.Abrir_Tablas(1),bg="#C0DFFE")
+        Boton2.image = foto   
+        Boton2.config(image=foto)
+        Boton2.grid(row=5,column=2,sticky="nsew")
+        Boton3 = Button(Frame, text ="",command=lambda:Proyecto.Abrir_Tablas(2),bg="#C0DFFE")
+        Boton3.image = foto   
+        Boton3.config(image=foto)
+        Boton3.grid(row=8,column=2,sticky="nsew")
+        Boton4 = Button(Frame, text ="",command=lambda:Proyecto.Abrir_Tablas(3),bg="#C0DFFE")
+        Boton4.image = foto   
+        Boton4.config(image=foto)
+        Boton4.grid(row=11,column=2,sticky="nsew")
+        Boton5 = Button(Frame, text ="",command=lambda:Proyecto.Abrir_Tablas(4),bg="#C0DFFE")
+        Boton5.image = foto   
+        Boton5.config(image=foto)
+        Boton5.grid(row=14,column=2,sticky="nsew")
+        Boton6 = Button(Frame, text ="",command=lambda:Proyecto.Abrir_Tablas(5),bg="#C0DFFE")
+        Boton6.image = foto   
+        Boton6.config(image=foto)
+        Boton6.grid(row=17,column=2,sticky="nsew")
         Boton7=(Button(Frame, text="Generar",command=lambda:Proyecto.Ruta_especifica(),width=4, height=1,bg="snow4",borderwidth=5)).grid(row=19,column=1,sticky="nsew")
 
         Label_1=Label(Frame, text="Seleccione el Archivo de Pedidos",width=30, height=2,bg="#C0DFFE",font='Helvetica 10 bold').grid(row=1,column=1,sticky="wsn")
@@ -124,23 +143,26 @@ class Proyecto():
             self.Ventana.grid(row=2,column=1,sticky="s")
             self.Canvas.grid(row=0,column=0)
             self.Canvas.configure(yscrollcommand=scroll.set)
-            inicial=StringVar()
-            inicial.set("Elige")
+            ports=[StringVar(),StringVar(),StringVar(),StringVar()]
+            ports[0].set("Elige")
+            ports[1].set("Elige")
+            ports[2].set("Elige")
+            ports[3].set("Elige")
             puertos1=serial.tools.list_ports.comports()
             aux=0
             for puerto in puertos1:
                 self.Puertos.append(str(puerto))
                 aux+=1
-            Menu1=OptionMenu(self.Ventana2,inicial,*self.Puertos)
+            Menu1=OptionMenu(self.Ventana2,ports[0],*self.Puertos)
             Menu1.config(width=10, height=2)
             Menu1.grid(row=5,column=0,sticky="ewsn")
-            Menu2=OptionMenu(self.Ventana2,inicial,*self.Puertos)
+            Menu2=OptionMenu(self.Ventana2,ports[1],*self.Puertos)
             Menu2.config(width=10, height=2)
             Menu2.grid(row=5,column=1,sticky="wsne")
-            Menu3=OptionMenu(self.Ventana2,inicial,*self.Puertos)
+            Menu3=OptionMenu(self.Ventana2,ports[2],*self.Puertos)
             Menu3.config(width=10, height=2)
             Menu3.grid(row=5,column=2,sticky="esnw")
-            Menu4=OptionMenu(self.Ventana2,inicial,*self.Puertos)
+            Menu4=OptionMenu(self.Ventana2,ports[3],*self.Puertos)
             Menu4.config(width=10, height=2)
             Menu4.grid(row=5,column=3,sticky="senw")
 
@@ -180,9 +202,8 @@ class Proyecto():
             Label_9=Label(self.Canvas, text="Fecha",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=7,sticky="nsew")
             Label_11=Label(self.Canvas, text="Hora",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=8,sticky="nsew")
 
-            Separadores=Label(self.Pestaña1,width=40, height=2,bg="#C0DFFE").grid(row=0,column=0,sticky="wsn")
-            Separadores=Label(self.Pestaña1,width=40, height=2,bg="#C0DFFE").grid(row=3,column=0,sticky="wsn")
-            Separadores=Label(self.Pestaña1,width=40, height=2,bg="#C0DFFE").grid(row=0,column=0,sticky="wsn")
+            Separadores=Label(self.Pestaña1,width=55, height=2,bg="#C0DFFE").grid(row=0,column=0,sticky="wsn")
+            Separadores=Label(self.Pestaña1,width=40, height=2,bg="#C0DFFE").grid(row=1,column=1,sticky="wsn")
 
             Auxiliar=8
             for Indices in self.Tabla:
@@ -193,6 +214,7 @@ class Proyecto():
                     Auxiliar2+=1
                 Auxiliar+=1
             Proyecto.prueba()
+
     @classmethod
     def Verificar(self):
         Aux=0

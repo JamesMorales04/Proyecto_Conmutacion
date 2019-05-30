@@ -1,6 +1,5 @@
 Modulo	Pedido	Hora actualizado
-D	58304	5/09/2018 10:45:08.45 a. m.
-		
+D	58304	5/09/2018 10:45:08.45 a. m	
 		
 		
 		

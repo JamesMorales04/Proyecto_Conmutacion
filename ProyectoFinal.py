@@ -34,6 +34,7 @@ class Proyecto():
         self.Base.title("Almacenamiento")
         self.Base.minsize(1366,768)
         Proyecto.Crear_Pestañas()
+        self.Canvas.update()
         self.Base.protocol("WM_DELETE_WINDOW", self.Guardar)
         self.Base.mainloop()
 
@@ -132,8 +133,11 @@ class Proyecto():
                     
         if(self.Generado==False):
             self.Generado=True
-            Proyecto.Tabla_Grafico()
-
+            Proyecto.Generar_Grafico()
+    @classmethod
+    def Generar_Grafico(self):
+        hilo3 = threading.Thread(target=Proyecto.Tabla_Grafico)
+        hilo3.start()
     @classmethod
     def Tabla_Grafico(self):
 
@@ -225,7 +229,6 @@ class Proyecto():
                 Auxiliar+=1
             self.Canvas.create_window(0,0,window=self.Ventana3,anchor="nw")
             self.Canvas.pack(side="left",fill="both",expand=True)
-            self.Ventana.update()
             self.Canvas.config(scrollregion=self.Canvas.bbox("all"))
             Proyecto.prueba()
 
@@ -249,9 +252,6 @@ class Proyecto():
             Aux+=1
         return Posicion
     @classmethod
-    def Actualizar(self,Modulo):
-        Proyecto.Tiempo(Modulo)
-    @classmethod
     def prueba(self):
         hilo2 = threading.Thread(target=Proyecto.prueba2)
         hilo2.start()
@@ -266,16 +266,16 @@ class Proyecto():
 
         
         if Modulo=='A':
-            self.Estado[0].set("Enviado")
+            self.Estado[0].set("Enviando")
             self.Pedido[0].set(Valor)
         elif Modulo=='B':
-            self.Estado[1].set("Enviado")
+            self.Estado[1].set("Enviando")
             self.Pedido[1].set(Valor)
         elif Modulo=='C':
-            self.Estado[2].set("Enviado")
+            self.Estado[2].set("Enviando")
             self.Pedido[2].set(Valor)
         else:
-            self.Estado[3].set("Enviado")
+            self.Estado[3].set("Enviando")
             self.Pedido[3].set(Valor)
 
 
@@ -290,7 +290,7 @@ class Proyecto():
         while True:
             Valor=Proyecto.Verificar()
             if Valor != 0:
-                Proyecto.Actualizar(Valor)
+                Proyecto.Tiempo(Valor)
                 
     @classmethod
     def Abrir_Tablas(self,a):  
@@ -298,7 +298,8 @@ class Proyecto():
         self.Ruta[a].set(Archivo) 
     @classmethod
     def Guardar(self):  
-        csv=open("BackUp.csv","w")
+        csv=open("BackIp.csv","w")
+        csv.write("Pedido"+";"+"Modulo"+";"+"Posicion"+";"+"Referencia"+";"+"Cantidad"+";"+"Numero"+";"+"Fecha"+";"+"Hora"+";"+"\n")
         for key in self.Tabla:
             fila=0
             contador=1

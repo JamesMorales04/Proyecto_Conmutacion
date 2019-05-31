@@ -1,15 +1,16 @@
-from tkinter import ttk
+import serial
 import serial.tools.list_ports
 import csv
 import time
 import os
 import threading
-from tkinter import font
-from tkinter import *
 import tkinter as tk
+from tkinter import *
+from tkinter import font
+from tkinter import ttk
 from tkinter import filedialog
 from tkinter import messagebox
-import serial
+
 
 class Proyecto():
 
@@ -27,11 +28,13 @@ class Proyecto():
     Ventana = Frame(Pestaña1)  
     Ventana2 = Frame(Pestaña1)  
     Canvas=tk.Canvas(Ventana)
+    Ventana3 = Frame(Canvas)  
 
     def Panel_Principal(self):
         self.Base.title("Almacenamiento")
         self.Base.minsize(1366,768)
         Proyecto.Crear_Pestañas()
+        self.Base.protocol("WM_DELETE_WINDOW", self.Guardar)
         self.Base.mainloop()
 
     @classmethod
@@ -125,7 +128,7 @@ class Proyecto():
                 for Union in Lista_AUX:
                     if Union[0]==row[2]:
                         if self.Filas_totales not in self.Tabla:
-                            self.Tabla[self.Filas_totales]=[row[0]]+[row[1]]+[row[2]]+[row[3]]+[row[4]]+[Union[1]]+[0]+[0]+[0]
+                            self.Tabla[self.Filas_totales]=[row[0]]+[row[1]]+[row[2]]+[row[3]]+[row[4]]+[Union[1]]+[StringVar()]+[StringVar()]+[0]
                     
         if(self.Generado==False):
             self.Generado=True
@@ -135,14 +138,16 @@ class Proyecto():
     def Tabla_Grafico(self):
 
         if(self.Filas_totales>0):
-            scroll=tk.Scrollbar(self.Ventana,orient='vertical',command=self.Canvas.yview)
-            scroll.grid(row=0,column=1,sticky='ns')
             self.Ventana2.config(width=600,height=600,relief="sunken",bd=25,bg="#808080") 
             self.Ventana2.grid(row=0,column=1,sticky="s")
-            self.Ventana.config(width=600,height=600,relief="sunken",bd=25,bg="#808080") 
+            self.Ventana.config(width=1000,height=1000,relief="sunken",bd=25,bg="#808080") 
             self.Ventana.grid(row=2,column=1,sticky="s")
-            self.Canvas.grid(row=0,column=0)
-            self.Canvas.configure(yscrollcommand=scroll.set)
+
+            scroll=tk.Scrollbar(self.Ventana)
+            self.Canvas.configure(yscrollcommand=scroll.set,width=650,height=400)
+            scroll.config(command=self.Canvas.yview)
+            scroll.pack(side="right",fill=Y)
+            self.Ventana3=Frame(self.Canvas,width=1000,height=1000)
             ports=[StringVar(),StringVar(),StringVar(),StringVar()]
             ports[0].set("Elige")
             ports[1].set("Elige")
@@ -192,15 +197,15 @@ class Proyecto():
             Label_2=Label(self.Ventana2, text="VISA Modulo C",width=20, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=4,column=2,sticky="ns")
             Label_2=Label(self.Ventana2, text="VISA Modulo D",width=20, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=4,column=3,sticky="wns")
 
-            Label_2=Label(self.Canvas, text="Total",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=9,sticky="nsew")
-            Label_3=Label(self.Canvas, text="Pedido",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=1,sticky="nsew")
-            Label_4=Label(self.Canvas, text="Modulo",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=2,sticky="nsew")
-            Label_5=Label(self.Canvas, text="Posicion",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=3,sticky="nsew")
-            Label_6=Label(self.Canvas, text="Referencia",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=4,sticky="nsew")
-            Label_7=Label(self.Canvas, text="Cantidad",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=5,sticky="nsew")
-            Label_8=Label(self.Canvas, text="Numero",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=6,sticky="nsew")
-            Label_9=Label(self.Canvas, text="Fecha",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=7,sticky="nsew")
-            Label_11=Label(self.Canvas, text="Hora",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=8,sticky="nsew")
+            Label_2=Label(self.Ventana3, text="Total",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=9,sticky="nsew")
+            Label_3=Label(self.Ventana3, text="Pedido",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=1,sticky="nsew")
+            Label_4=Label(self.Ventana3, text="Modulo",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=2,sticky="nsew")
+            Label_5=Label(self.Ventana3, text="Posicion",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=3,sticky="nsew")
+            Label_6=Label(self.Ventana3, text="Referencia",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=4,sticky="nsew")
+            Label_7=Label(self.Ventana3, text="Cantidad",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=5,sticky="nsew")
+            Label_8=Label(self.Ventana3, text="Numero",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=6,sticky="nsew")
+            Label_9=Label(self.Ventana3, text="Fecha",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=7,sticky="nsew")
+            Label_11=Label(self.Ventana3, text="Hora",width=10, height=2,fg="white",bg="black",relief="solid",borderwidth=1).grid(row=3,column=8,sticky="nsew")
 
             Separadores=Label(self.Pestaña1,width=55, height=2,bg="#C0DFFE").grid(row=0,column=0,sticky="wsn")
             Separadores=Label(self.Pestaña1,width=40, height=2,bg="#C0DFFE").grid(row=1,column=1,sticky="wsn")
@@ -209,10 +214,19 @@ class Proyecto():
             for Indices in self.Tabla:
                 Auxiliar2=1
                 for Valores in self.Tabla[Indices]:
-                    cell=Label(self.Canvas,width=10,text=Valores,relief="solid",borderwidth=1)
-                    cell.grid(row=Auxiliar,column=Auxiliar2)
-                    Auxiliar2+=1
+                    if Auxiliar2==7 or Auxiliar2==8:
+                        cell=Label(self.Ventana3,width=10,textvariable=Valores,relief="solid",borderwidth=1)
+                        cell.grid(row=Auxiliar,column=Auxiliar2)
+                        Auxiliar2+=1
+                    else:
+                        cell=Label(self.Ventana3,width=10,text=Valores,relief="solid",borderwidth=1)
+                        cell.grid(row=Auxiliar,column=Auxiliar2)
+                        Auxiliar2+=1
                 Auxiliar+=1
+            self.Canvas.create_window(0,0,window=self.Ventana3,anchor="nw")
+            self.Canvas.pack(side="left",fill="both",expand=True)
+            self.Ventana.update()
+            self.Canvas.config(scrollregion=self.Canvas.bbox("all"))
             Proyecto.prueba()
 
     @classmethod
@@ -222,14 +236,12 @@ class Proyecto():
         Posicion=0
         Estados=[False,False,False,False]
         for Modulos in range(2,6):
-            print(Modulos)
             if(self.ModificacionOld[Aux][0]==0):
                 self.ModificacionOld[Aux][0]=os.path.getmtime(self.Ruta[Modulos].get())
                 Estados[Aux]=False
             else:
                 self.ModificacionOld[Aux][1]=(os.path.getmtime(self.Ruta[Modulos].get()))
                 if(self.ModificacionOld[Aux][0]!=self.ModificacionOld[Aux][1]):
-                    print("assadadasfaf")
                     self.ModificacionOld[Aux][0]=self.ModificacionOld[Aux][1]
                     Posicion=Modulos
                 else:
@@ -238,23 +250,13 @@ class Proyecto():
         return Posicion
     @classmethod
     def Actualizar(self,Modulo):
-        print("Entro1")
         Proyecto.Tiempo(Modulo)
-        Auxiliar=8
-        for Indices in self.Tabla:
-            Auxiliar2=1
-            for Valores in self.Tabla[Indices]:
-                cell=Label(self.Canvas,text=Valores,width=10,relief="solid",borderwidth=1)
-                cell.grid(row=Auxiliar,column=Auxiliar2)
-                Auxiliar2+=1
-            Auxiliar+=1
     @classmethod
     def prueba(self):
         hilo2 = threading.Thread(target=Proyecto.prueba2)
         hilo2.start()
     @classmethod
     def Tiempo(self,Modu):       
-        print("Entro2") 
         Archivo=open(self.Ruta[Modu].get())
         Temporal=Archivo.read()
         Temporal=Temporal.splitlines()
@@ -281,8 +283,8 @@ class Proyecto():
             if Modulo==self.Tabla[Modulos][1] and self.Tabla[Modulos][0]==Valor:
                 print(Valor)
                 print(self.Tabla[Modulos][0])
-                self.Tabla[Modulos][7]= time.strftime("%X")
-                self.Tabla[Modulos][6]= time.strftime("%d/%m/%y")
+                self.Tabla[Modulos][7].set(time.strftime("%X"))
+                self.Tabla[Modulos][6].set(time.strftime("%d/%m/%y"))
     @classmethod
     def prueba2(self):
         while True:
@@ -294,7 +296,21 @@ class Proyecto():
     def Abrir_Tablas(self,a):  
         Archivo= filedialog.askopenfilename(title="Abrir",initialdir="C:\\Users\Desktop")
         self.Ruta[a].set(Archivo) 
-
+    @classmethod
+    def Guardar(self):  
+        csv=open("BackUp.csv","w")
+        for key in self.Tabla:
+            fila=0
+            contador=1
+            for Valores_Tabla in self.Tabla[key]:
+                if contador==7 or contador==8:
+                    fila=str(fila)+str(Valores_Tabla.get())+";"
+                else:
+                    fila=str(fila)+str(Valores_Tabla)+";"
+                contador+=1
+            csv.write(fila+";"+"\n")
+        self.Base.destroy()
+        
     @classmethod
     def Arduino(self):
         cosa=b"Holi"

@@ -31,6 +31,7 @@ class Proyecto():
     Canvas=tk.Canvas(Ventana)
     Ventana3 = Frame(Canvas)  
 
+######## Aqui se establecen los parametros del main (ventana principal que contiene los frames)
     def Panel_Principal(self):
         #self.Base.iconbitmap(Logo.ico)
         self.Base.title("Almacenamiento")
@@ -39,7 +40,7 @@ class Proyecto():
         self.Canvas.update()
         self.Base.protocol("WM_DELETE_WINDOW", self.Guardar)
         self.Base.mainloop()
-
+######## Este metodo crea las pestañas "Rutas" y "Principal"
     @classmethod
     def Crear_Pestañas(self):
         Pestaña2=Frame(self.Pestañas,bg="#78b4ed")
@@ -48,6 +49,7 @@ class Proyecto():
         self.Pestañas.add(Pestaña2, text='Rutas')
         self.Pestañas.pack(expan=1,fill='both')
 
+######## Rutas crea los label's y botones para añadir la direccion de los archivos csv y los txt de los modulos
     @classmethod
     def Rutas(self,Frame):
     
@@ -103,15 +105,15 @@ class Proyecto():
         Separadores6=Label(Frame,width=90, height=2,bg="#78b4ed").grid(row=17,column=1,sticky="wsn")
 
 
-
+######## este metodo controla que todos los campos de "rutas" una direccion
     @classmethod
     def Ruta_especifica(self):
         if self.Generado==False:
-            if((self.Ruta[0].get()=="" or self.Ruta[1].get()=="" )):
+            if((self.Ruta[0].get()=="" or self.Ruta[1].get()=="" or self.Ruta[2].get()=="" or self.Ruta[3].get()=="" or self.Ruta[4].get()=="" or self.Ruta[5].get()=="")):
                 messagebox.showinfo("Informe error","Falta de datos o datos repetidos")
             else:
                 Proyecto.Leer_Tablas(self)
-    
+######## lees las tablas
     def Leer_Tablas(self):
         Lista_AUX=[]
         with open(self.Ruta[1].get()) as csv_File:
@@ -130,15 +132,18 @@ class Proyecto():
                 for Union in Lista_AUX:
                     if Union[0]==row[2]:
                         if self.Filas_totales not in self.Tabla:
+                            ######## Asigna la informacion contenida en el csv en orden segun la columna correspondiente
                             self.Tabla[self.Filas_totales]=[row[0]]+[row[1]]+[row[2]]+[row[3]]+[row[4]]+[Union[1]]+[StringVar()]+[StringVar()]+[0]
                     
         if(self.Generado==False):
             self.Generado=True
             Proyecto.Generar_Grafico()
+######## Ejecuta los hilos que generan la tabla       
     @classmethod
     def Generar_Grafico(self):
         hilo3 = threading.Thread(target=Proyecto.Tabla_Grafico)
         hilo3.start()
+######## Se encarga de Graficar la tabla        
     @classmethod
     def Tabla_Grafico(self):
 
@@ -232,6 +237,7 @@ class Proyecto():
             self.Canvas.create_window(0,0,window=self.Ventana3,anchor="nw")
             self.Canvas.pack(side="left",fill="both",expand=True)
             self.Canvas.config(scrollregion=self.Canvas.bbox("all"))
+            
             Proyecto.prueba()
 
     @classmethod
